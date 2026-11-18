@@ -42,5 +42,5 @@ jobs:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
           gh release create "v$VERSION" --target "$GITHUB_SHA" --title "spec-driven $VERSION" \
-            --notes "Upload **spec-driven-plugin-$VERSION.zip** under Customize > Plugins > Add > Upload plugin. Accounts that only allow skills: upload each zip from the skills set under Customize > Skills. See the README for details." \
+            --notes "Marketplace installs update by themselves. Where marketplaces are blocked, upload **spec-driven-plugin-$VERSION.zip** under Customize > Plugins > Add > Upload plugin; where only skills are allowed, upload the skill zips under Customize > Skills. See the README." \
             dist/spec-driven-plugin-$VERSION.zip dist/skills/*.zip

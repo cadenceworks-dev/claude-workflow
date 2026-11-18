@@ -51,41 +51,27 @@ flowchart LR
 
 ## Setup
 
-### 1. Install: upload the zip (main path)
+### 1. Install the plugin on your Claude account (main path)
 
-Works on accounts where plugin marketplaces are blocked, which is the case on our company
-accounts.
-
-1. Download **`spec-driven-plugin-<version>.zip`** from the
-   [latest release](https://github.com/cadenceworks-dev/claude-workflow/releases/latest).
-2. In claude.ai or the Claude desktop app, signed in with the account you will work with, open
-   [**Customize > Plugins**](https://claude.ai/customize/plugins), then **Add > Upload plugin**,
-   and pick the zip.
-3. Check that it shows 6 skills and 2 agents, and that its toggle is on.
+1. Open [**Customize > Plugins**](https://claude.ai/customize/plugins) in claude.ai or the Claude
+   desktop app, signed in with the account you will work with.
+2. **Add > Add marketplace**, enter `cadenceworks-dev/claude-workflow`.
+3. Open **spec-driven**, select **Add**, and turn on **Sync automatically** so new versions arrive
+   by themselves.
 
 The plugin is saved on that account, so it reaches chat, Cowork, Claude desktop projects and
-Claude Code (as `spec-driven@synced`) without another install.
-
-**To update:** download the newer release zip and upload it again the same way. Uploaded plugins
-do not update themselves; the release notes say what changed. On a Team or Enterprise account you
-can share the uploaded plugin with colleagues, or an Owner can publish it to the whole
-organization.
-
-**If uploading a plugin is blocked too:** upload the skills one by one. Each release also holds
-`interview`, `spec`, `adopt`, `brief`, `ticket` and `verify` zips: upload each under
-[**Customize > Skills**](https://claude.ai/customize/skills). Every skill zip carries the
-templates and agent instructions it needs; without the plugin, `/ticket` runs the checker as a
-general-purpose subagent with those instructions. Skills are then called `/brief`, `/ticket`, and
-so on, and the format-on-edit hook is not available (use the vendored copy below to get it).
+Claude Code (as `spec-driven@synced`) without another install. The repository is public, so no
+GitHub connection is needed.
 
 ### Other ways to install
 
-| Situation                                        | How                                                                                                    |
-| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
-| Account allows marketplaces                      | **Customize > Plugins > Add > Add marketplace**, `cadenceworks-dev/claude-workflow`, turn on **Sync automatically** (updates arrive by themselves) |
-| Company Owner wants it for everyone              | [Organization settings > Plugins & skills](https://claude.ai/admin-settings/skills?tab=marketplaces): add the marketplace or upload the zip; allowlist entry `{ "source": "github", "repo": "cadenceworks-dev/claude-workflow" }` |
-| Claude Code without account sync                 | `claude plugin marketplace add cadenceworks-dev/claude-workflow` then `claude plugin install spec-driven@cadenceworks` |
-| Nothing can be installed                         | Vendored copy: ask `/adopt` to copy the skills, agents and hook into the repository's `.claude/`       |
+| Situation | How | Updates |
+| --- | --- | --- |
+| **Marketplaces blocked, uploads allowed** (our company accounts today) | Download `spec-driven-plugin-<version>.zip` from the [latest release](https://github.com/cadenceworks-dev/claude-workflow/releases/latest), then **Customize > Plugins > Add > Upload plugin** | Upload the newer zip again |
+| **Plugin uploads blocked too** | Upload each skill zip from the release (`interview`, `spec`, `adopt`, `brief`, `ticket`, `verify`) under [**Customize > Skills**](https://claude.ai/customize/skills). Each carries its templates and agent instructions; `/ticket` runs the checker as a general-purpose subagent. Commands lose the `spec-driven:` prefix; no format hook | Upload the newer zips again |
+| **Company Owner wants it for everyone** | [Organization settings > Plugins & skills](https://claude.ai/admin-settings/skills?tab=marketplaces): add the marketplace or upload the zip. Allowlist entry: `{ "source": "github", "repo": "cadenceworks-dev/claude-workflow" }` | Automatic with the marketplace |
+| **Claude Code without account sync** | `claude plugin marketplace add cadenceworks-dev/claude-workflow` then `claude plugin install spec-driven@cadenceworks` | `claude plugin update spec-driven@cadenceworks` |
+| **Nothing can be installed** | Vendored copy: ask `adopt` to copy the skills, agents and hook into the repository's `.claude/` | Ask `adopt` to refresh the copy |
 
 ### 2. Create the Claude project
 
@@ -114,4 +100,5 @@ so on, and the format-on-edit hook is not available (use the vendored copy below
 2. Raise `version` in `plugins/spec-driven/.claude-plugin/plugin.json` and
    `.claude-plugin/marketplace.json` (CI fails when they differ).
 3. Merge. The **Release** workflow builds the zips (`scripts/build-zips.sh`) and publishes
-   release `v<version>` with them attached. Then re-upload the plugin zip on each account.
+   release `v<version>` with them attached. Marketplace installs update by themselves; uploaded
+   copies need the new zip uploaded again.

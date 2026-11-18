@@ -4,8 +4,9 @@ Spec-driven way of working for Claude: interview, signed-off spec, one brief per
 WHEN/THEN acceptance criteria, tickets built in fresh-session tries and judged by an independent
 checker.
 
-Install by uploading the release zip on claude.ai (Customize > Plugins > Add > Upload plugin), or
-from a marketplace:
+Install from the marketplace (on claude.ai: Customize > Plugins > Add > Add marketplace,
+`cadenceworks-dev/claude-workflow`), or upload the release zip where marketplaces are blocked.
+In Claude Code:
 
 ```
 /plugin install spec-driven --marketplace cadenceworks-dev/claude-workflow
