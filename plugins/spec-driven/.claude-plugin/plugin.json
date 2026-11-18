@@ -1,0 +1,16 @@
+{
+  "name": "spec-driven",
+  "version": "0.1.0",
+  "description": "Spec-driven way of working: interview, signed-off spec, phase briefs with WHEN/THEN criteria, tickets built in fresh-session tries and judged by an independent checker.",
+  "author": {
+    "name": "Cadence Works"
+  },
+  "keywords": [
+    "spec",
+    "workflow",
+    "acceptance-criteria",
+    "review"
+  ],
+  "license": "MIT",
+  "repository": "https://github.com/cadenceworks-dev/claude-workflow"
+}
