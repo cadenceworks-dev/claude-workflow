@@ -1,0 +1,27 @@
+name: Validate
+
+# Checks the marketplace and the plugin on every pull request and on main.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Marketplace manifest
+        run: npx --yes @anthropic-ai/claude-code@2.1.327 plugin validate --strict .
+      - name: Plugin
+        run: npx --yes @anthropic-ai/claude-code@2.1.327 plugin validate --strict plugins/spec-driven
+      - name: Plugin and marketplace versions match
+        run: |
+          a=$(jq -r .version plugins/spec-driven/.claude-plugin/plugin.json)
+          b=$(jq -r '.plugins[] | select(.name=="spec-driven") | .version' .claude-plugin/marketplace.json)
+          test "$a" = "$b" || { echo "plugin.json $a, marketplace.json $b"; exit 1; }
+      - name: Format hook runs and never blocks
+        run: echo '{"tool_input":{"file_path":"README.md"}}' | node plugins/spec-driven/hooks/format.mjs

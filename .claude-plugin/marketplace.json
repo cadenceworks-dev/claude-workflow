@@ -1,0 +1,15 @@
+{
+  "name": "cadenceworks",
+  "owner": { "name": "Cadence Works" },
+  "metadata": {
+    "description": "Claude Code plugins used across Cadence Works projects."
+  },
+  "plugins": [
+    {
+      "name": "spec-driven",
+      "source": "./plugins/spec-driven",
+      "description": "Spec-driven way of working: interview, signed-off spec, phase briefs, tickets built in fresh-session tries and checked by an independent agent.",
+      "version": "0.1.0"
+    }
+  ]
+}

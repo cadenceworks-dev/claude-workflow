@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": ["Bash(<validation command>)", "Bash(<test command>)"],
+    "deny": [
+      "Bash(git push origin main:*)",
+      "Bash(git push --force:*)",
+      "Bash(<deploy command>:*)",
+      "Bash(<infrastructure apply or destroy command>:*)",
+      "Read(**/.env)",
+      "Read(**/.env.*)",
+      "Read(**/*.pem)",
+      "Read(**/*.key)",
+      "Read(**/*.p12)"
+    ]
+  },
+  "extraKnownMarketplaces": {
+    "cadenceworks": {
+      "source": { "source": "github", "repo": "cadenceworks-dev/claude-workflow" }
+    }
+  },
+  "enabledPlugins": {
+    "spec-driven@cadenceworks": true
+  }
+}

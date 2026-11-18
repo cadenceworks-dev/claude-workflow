@@ -1,0 +1,17 @@
+{
+  "description": "Formats each file Claude edits with the formatter the project already uses, so the format check in CI does not fail.",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "command -v node >/dev/null 2>&1 && node \"${CLAUDE_PLUGIN_ROOT}/hooks/format.mjs\" || true",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}
