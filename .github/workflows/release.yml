@@ -1,0 +1,46 @@
+name: Release
+
+# When main holds a plugin version that has no release yet, builds the upload zips and publishes
+# them as release v<version>. To release: raise "version" in plugin.json and marketplace.json, merge.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Version
+        id: version
+        run: echo "version=$(jq -r .version plugins/spec-driven/.claude-plugin/plugin.json)" >> "$GITHUB_OUTPUT"
+      - name: Skip when this version is already released
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "v${{ steps.version.outputs.version }}" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Build the zips
+        if: steps.check.outputs.exists == 'false'
+        run: ./scripts/build-zips.sh
+      - name: Publish the release
+        if: steps.check.outputs.exists == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          gh release create "v$VERSION" --target "$GITHUB_SHA" --title "spec-driven $VERSION" \
+            --notes "Marketplace installs update by themselves. Where marketplaces are blocked, upload **spec-driven-plugin-$VERSION.zip** under Customize > Plugins > Add > Upload plugin; where only skills are allowed, upload the skill zips under Customize > Skills. See the README." \
+            dist/spec-driven-plugin-$VERSION.zip dist/skills/*.zip

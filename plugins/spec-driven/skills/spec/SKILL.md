@@ -14,7 +14,8 @@ off before any build work starts.
   comment on a phone. Put its link in project memory and in `docs/README.md` of the repository.
 - Without that: `docs/spec.md` in the repository, merged by pull request.
 
-Use the template in `${CLAUDE_PLUGIN_ROOT}/templates/spec.md`. Keep sections short; use a diagram
+Use the `spec.md` template, in `templates/` next to this skill or in the plugin's `templates/`
+(`${CLAUDE_PLUGIN_ROOT}/templates/`). Keep sections short; use a diagram
 where a flow or a structure is easier to see than to read (Mermaid in Markdown).
 
 ## Writing it

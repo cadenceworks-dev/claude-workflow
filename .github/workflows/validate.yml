@@ -23,5 +23,7 @@ jobs:
           a=$(jq -r .version plugins/spec-driven/.claude-plugin/plugin.json)
           b=$(jq -r '.plugins[] | select(.name=="spec-driven") | .version' .claude-plugin/marketplace.json)
           test "$a" = "$b" || { echo "plugin.json $a, marketplace.json $b"; exit 1; }
+      - name: Upload zips build
+        run: ./scripts/build-zips.sh
       - name: Format hook runs and never blocks
         run: echo '{"tool_input":{"file_path":"README.md"}}' | node plugins/spec-driven/hooks/format.mjs

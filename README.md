@@ -51,34 +51,27 @@ flowchart LR
 
 ## Setup
 
-### 1. Install the plugin on your Claude account (once per account)
-
-This is the route that reaches every Claude surface: chat, Cowork, Claude desktop projects and
-Claude Code.
+### 1. Install the plugin on your Claude account (main path)
 
 1. Open [**Customize > Plugins**](https://claude.ai/customize/plugins) in claude.ai or the Claude
-   desktop app, signed in with the account you will work with (your work account for company
-   projects).
+   desktop app, signed in with the account you will work with.
 2. **Add > Add marketplace**, enter `cadenceworks-dev/claude-workflow`.
-3. Open **spec-driven** and select **Add**. Turn on **Sync automatically** to get updates.
+3. Open **spec-driven**, select **Add**, and turn on **Sync automatically** so new versions arrive
+   by themselves.
 
-The repository is public, so no GitHub connection is needed on the work side.
+The plugin is saved on that account, so it reaches chat, Cowork, Claude desktop projects and
+Claude Code (as `spec-driven@synced`) without another install. The repository is public, so no
+GitHub connection is needed.
 
-**Company account (Team or Enterprise plan).** An Owner of your company's Claude organization
-decides whether members can add their own marketplaces. If **Add marketplace** is missing or
-refused, ask the Owner to do one of these:
+### Other ways to install
 
-- add the marketplace for the whole organization under
-  [Organization settings > Plugins & skills](https://claude.ai/admin-settings/skills?tab=marketplaces)
-  (they can also make the plugin "installed by default" for everyone); or
-- if they keep an allowlist of plugin sources (`strictKnownMarketplaces` in Claude Code managed
-  settings), add this entry:
-
-  ```json
-  { "source": "github", "repo": "cadenceworks-dev/claude-workflow" }
-  ```
-
-If plugins are switched off altogether, use the vendored copy (step 3, last point).
+| Situation | How | Updates |
+| --- | --- | --- |
+| **Marketplaces blocked, uploads allowed** (our company accounts today) | Download `spec-driven-plugin-<version>.zip` from the [latest release](https://github.com/cadenceworks-dev/claude-workflow/releases/latest), then **Customize > Plugins > Add > Upload plugin** | Upload the newer zip again |
+| **Plugin uploads blocked too** | Upload each skill zip from the release (`interview`, `spec`, `adopt`, `brief`, `ticket`, `verify`) under [**Customize > Skills**](https://claude.ai/customize/skills). Each carries its templates and agent instructions; `/ticket` runs the checker as a general-purpose subagent. Commands lose the `spec-driven:` prefix; no format hook | Upload the newer zips again |
+| **Company Owner wants it for everyone** | [Organization settings > Plugins & skills](https://claude.ai/admin-settings/skills?tab=marketplaces): add the marketplace or upload the zip. Allowlist entry: `{ "source": "github", "repo": "cadenceworks-dev/claude-workflow" }` | Automatic with the marketplace |
+| **Claude Code without account sync** | `claude plugin marketplace add cadenceworks-dev/claude-workflow` then `claude plugin install spec-driven@cadenceworks` | `claude plugin update spec-driven@cadenceworks` |
+| **Nothing can be installed** | Vendored copy: ask `adopt` to copy the skills, agents and hook into the repository's `.claude/` | Ask `adopt` to refresh the copy |
 
 ### 2. Create the Claude project
 
@@ -86,36 +79,26 @@ If plugins are switched off altogether, use the vendored copy (step 3, last poin
    brand-new product).
 2. Paste [`project-instructions.md`](plugins/spec-driven/templates/project-instructions.md) into
    the project's instructions and fill in the `<...>` parts (owner, stop-and-ask list, release
-   path).
+   path). If you installed the skills one by one, drop the `spec-driven:` prefix from the
+   commands.
 3. Start with: _"Interview me about `<product>`."_ Then _"Write the spec"_, and after sign-off
    _"Adopt the workflow in the repository"_ and _"Brief phase 0"_.
 
-### 3. Per repository (done for you by `/spec-driven:adopt`)
+### 3. Per repository (done for you by `adopt`)
 
 - `CLAUDE.md` gets "Validation", "How we work" and "Rules".
 - `docs/` gets `README.md`, `decisions.md` and `phases/TEMPLATE.md`.
-- `.claude/rules/<area>.md` per area; `.claude/settings.json` with allow and deny rules, plus the
-  plugin listed for local Claude Code sessions.
+- `.claude/rules/<area>.md` per area; `.claude/settings.json` with allow and deny rules.
 - `.github/pull_request_template.md` with the criteria table, "Please veto" and "Spec delta".
-- **Vendored copy, when plugins cannot be used:** ask `/spec-driven:adopt` to vendor the plugin.
-  It copies the skills, agents and hook into the repository's `.claude/`, which every Claude Code
-  session reads, cloud sessions included. FareSlip works this way today.
+- **Vendored copy, when nothing can be installed:** `adopt` copies the skills, agents and hook
+  into the repository's `.claude/`, which every Claude Code session reads, cloud sessions
+  included. FareSlip works this way today.
 
-### Claude Code on a computer (optional)
+## Releasing a new version
 
-Plugins on your Claude account also sync to Claude Code in the terminal and the desktop **Code**
-tab. Without an account sync (API key, `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC`), install from
-the command line:
-
-```bash
-claude plugin marketplace add cadenceworks-dev/claude-workflow
-claude plugin install spec-driven@cadenceworks
-```
-
-## Updating the plugin
-
-Change files under `plugins/spec-driven/`, raise `version` in both
-`plugins/spec-driven/.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`, and merge.
-Accounts with **Sync automatically** pick it up; on the command line run
-`claude plugin update spec-driven@cadenceworks`. Check with `claude plugin validate .` before
-pushing (CI does the same).
+1. Change files under `plugins/spec-driven/`.
+2. Raise `version` in `plugins/spec-driven/.claude-plugin/plugin.json` and
+   `.claude-plugin/marketplace.json` (CI fails when they differ).
+3. Merge. The **Release** workflow builds the zips (`scripts/build-zips.sh`) and publishes
+   release `v<version>` with them attached. Marketplace installs update by themselves; uploaded
+   copies need the new zip uploaded again.

@@ -6,7 +6,7 @@ description: Plan one build phase before any code - tickets, WHEN/THEN acceptanc
 # Brief one phase
 
 Output: `docs/phases/<phase>.md`, following `docs/phases/TEMPLATE.md` (or
-`${CLAUDE_PLUGIN_ROOT}/templates/phase-brief.md`), in a pull request of its own. The brief is the
+the `phase-brief.md` template, in `templates/` next to this skill or in the plugin's `templates/`), in a pull request of its own. The brief is the
 only planning file: there are no separate ticket files.
 
 1. **Read** the spec sections for the phase, `docs/decisions.md`, earlier briefs and the code that

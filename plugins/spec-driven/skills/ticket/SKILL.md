@@ -11,7 +11,9 @@ criteria is not ready: write them into the brief and ask the owner once, with th
 You coordinate. The building and the checking each happen in a fresh session (a subagent), so no
 session grades its own work. With this plugin installed the agents are named
 `spec-driven:checker` and `spec-driven:access-reviewer`; a project may also define its own
-`checker` in `.claude/agents/`, which then wins.
+`checker` in `.claude/agents/`, which then wins. When neither exists (skills uploaded without the
+plugin), start a `general-purpose` subagent and give it, word for word, the instructions in
+`agents/checker.md` or `agents/access-reviewer.md` next to this skill, plus "change nothing".
 
 ```
 start -> try 1 (builder) -> checks + checker -> PASS -> pull request

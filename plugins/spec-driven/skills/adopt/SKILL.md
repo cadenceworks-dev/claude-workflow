@@ -5,9 +5,10 @@ description: Set up a repository for the spec-driven way of working - CLAUDE.md 
 
 # Adopt the workflow in a repository
 
-Templates are in `${CLAUDE_PLUGIN_ROOT}/templates/`. Examples from a real project (Expo phone
-app, AWS, multi-tenant API) are in `${CLAUDE_PLUGIN_ROOT}/examples/fareslip/`: use them only as
-inspiration, never copy them as they are.
+Templates are in `templates/` next to this skill (standalone upload) or in the plugin's
+`templates/` folder (`${CLAUDE_PLUGIN_ROOT}/templates/`). Examples from a real project (Expo phone
+app, AWS, multi-tenant API) are in the plugin's `examples/fareslip/`, when present: use them only
+as inspiration, never copy them as they are.
 
 ## 1. Read before writing
 

@@ -18,7 +18,9 @@ criterion counts as FAIL until its proof has been run in this session.
    - defaults chosen are in `docs/decisions.md` and in the "Please veto" list;
    - signed-off behaviour changed only with a "Spec delta" section and the owner's yes;
    - nothing touches production outside the release path the owner controls.
-5. For a ticket, run the `checker` agent as well: the builder's own check is not enough.
+5. For a ticket, run the `checker` agent as well: the builder's own check is not enough. Without
+   the agent, use a `general-purpose` subagent with the instructions in `agents/checker.md` next
+   to this skill.
 6. Report a table: criterion, proof, result (PASS, FAIL, not verified). List what could not be
    run here (cloud accounts, external services, real devices) so the owner knows what to check by
    hand.
